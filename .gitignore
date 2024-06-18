@@ -1,0 +1,20 @@
+# Poetry
+.venv/
+poetry.lock
+
+# Virtualenv
+venv/
+virtualenv/
+
+# Python cache
+__pycache__/
+
+# Coverage
+.coverage
+
+# Environment variables
+.env
+
+# Other temporary or generated files
+*.log
+*.tmp
