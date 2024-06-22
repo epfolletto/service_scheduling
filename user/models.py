@@ -10,14 +10,14 @@ class UsuarioManager(BaseUserManager):
         if not email:
             raise ValueError('O e-mail é obrigatório')
         email = self.normalize_email(email)
-        user = self.model(email=email, username=email, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_user(self, email, password=None, **extra_fields):
         # extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
@@ -34,8 +34,7 @@ class UsuarioManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    username = None
     email = models.EmailField('E-mail', unique=True)
     phone = models.CharField('Telefone', max_length=15)
     is_staff = models.BooleanField('Membro da equipe', default=True)
