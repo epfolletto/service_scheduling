@@ -143,3 +143,17 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ),
 }
+
+# EMAIL
+# DEFAULT_FROM_EMAIL = 'evandrofolletto@gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'evandrofolletto@gmail.com'
+EMAIL_HOST_PASSWORD = "otmygbtevtzqwhnj"
+# EMAIL_USE_SSL =
+# EMAIL_SUBJECT_PREFIX = '[E-mail teste]'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+

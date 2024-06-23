@@ -99,6 +99,33 @@ class CustomUserView(APIView):
                             status=status.HTTP_404_NOT_FOUND
                             )
         user.delete()
-        return Response({"message": "usuário deletado com sucesso",
+        return Response({"message": f'Usuário #{pk} deletado com sucesso',
                          "success": True},
                         status=status.HTTP_204_NO_CONTENT)
+
+
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import PasswordResetSerializer, SetNewPasswordSerializer
+
+
+class PasswordResetView(generics.GenericAPIView):
+    serializer_class = PasswordResetSerializer
+
+    def post(self, request, *args, **kwargs):
+        print('TCHE ENTREI AQUI')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'detail': 'Password reset e-mail has been sent.'}, status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmView(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+
+    def post(self, request, uidb64, token, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(uidb64, token)
+        return Response({'detail': 'Password has been reset.'}, status=status.HTTP_200_OK)
