@@ -37,10 +37,12 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField('E-mail', unique=True)
     phone = models.CharField('Telefone', max_length=15)
+    full_name = models.CharField('Nome completo', max_length=255)
+    cpf = models.CharField('CPF', max_length=11)
     is_staff = models.BooleanField('Membro da equipe', default=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'phone']
+    REQUIRED_FIELDS = ['phone', 'full_name', 'cpf']
 
     def __str__(self):
         return self.email

@@ -1,32 +1,26 @@
-# from django.contrib import admin
-# from django.urls import path, include
-# from user.views import UserViewSet
-# from rest_framework import routers?
-
-
-# router = routers.DefaultRouter()
-# router.register(r'users', UserViewSet)
-
-# urlpatterns = [
-#     path('api/', include('user.urls')),
-#     path('api/', include('appointment.urls')),
-#     path('', include(router.urls)),
-#     path("admin/", admin.site.urls),
-#     path('api-auth/', include('rest_framework.urls'))
-# ]
-
-
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 from user.views import PasswordResetView, PasswordResetConfirmView
 
-# from rest_framework import routers
-# from user.views import CustomUserView
+from django.urls import re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
-# router = routers.DefaultRouter()
-# router.register(r'users', CustomUserView)
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,4 +30,11 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('password-reset/', PasswordResetView.as_view(), name='password_reset'),
     path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+]
+
+#
+urlpatterns += [
+   path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

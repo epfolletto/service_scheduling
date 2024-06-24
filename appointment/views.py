@@ -14,7 +14,7 @@ class AppointmentAPIView(APIView):
     def is_superuser(self, request, type):
         is_superuser = request.user.is_superuser
         logged_user_id = request.user.id
-        if type == "post":
+        if type == "post" or type == "delete":
             body_user_id = (
                 request.data.get("user")
                 if request.data.get("user")
@@ -30,7 +30,6 @@ class AppointmentAPIView(APIView):
             "is_superuser": is_superuser,
             "logged_user_id": logged_user_id,
         }
-
 
     def get(self, request):
         data_req = self.is_superuser(request, "get")
@@ -153,7 +152,8 @@ class AppointmentAPIView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if not data_req["is_superuser"] and data_req["logged_user_id"] != pk:
+        if (not data_req["is_superuser"] and data_req["logged_user_id"] !=
+                data_req["body_user_id"]):
             return Response(
                 {
                     "message": "Você não possui permissão para alterar "
@@ -177,5 +177,3 @@ class AppointmentAPIView(APIView):
             },
             status=status.HTTP_204_NO_CONTENT,
         )
-
-

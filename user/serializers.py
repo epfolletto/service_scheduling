@@ -12,6 +12,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'id',
             'email',
             'phone',
+            'full_name',
+            'cpf',
             'password',
             'is_staff',
             'is_superuser',
@@ -28,7 +30,7 @@ class PasswordResetSerializer(serializers.Serializer):
     def validate_email(self, value):
         if not CustomUser.objects.filter(email=value).exists():
             raise serializers.ValidationError(
-                'No user is associated with this email address.'
+                'Nenhum usuário está associado com este endereço de e-mail.'
             )
         return value
 
@@ -42,8 +44,9 @@ class PasswordResetSerializer(serializers.Serializer):
             f'/password-reset-confirm/{uid}/{token}/'
         )
         user.email_user(
-            subject="Password Reset",
-            message=f"Click the link to reset your password: {reset_link}",
+            subject="redefinição de senha",
+            message=f"Clique no link para redefinir sua senha:"
+                    f" {reset_link}",
         )
 
 

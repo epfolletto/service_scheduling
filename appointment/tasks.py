@@ -1,8 +1,9 @@
+import os
 import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "service_scheduling.settings")
 django.setup()
 
 from celery import Celery
-from time import sleep
 from django.core.mail import send_mail
 from django.conf import settings
 from appointment.serializers import AppointmentSerializer
@@ -15,12 +16,6 @@ app = Celery(
     broker='redis://localhost:6379',
     backend='redis://localhost:6379',
 )
-
-
-@app.task()
-def fc_send_mail(subject, message, from_email, recipient_list):
-    sleep(2)
-    send_mail(subject, message, from_email, recipient_list)
 
 
 @app.task()
@@ -41,7 +36,7 @@ def send_confirmation_email_task(data):
     appointment = Appointment.objects.get(id=data['appointment_id'])
 
     subject = "Confirmação agendamento de serviço"
-    message = (f'Prezado {user.email}, o agendamento do '
+    message = (f'Prezado {user.full_name}, o agendamento do '
                f'serviço "{appointment.service}" '
                f'para a data de {appointment.date} foi '
                f'realizado com sucesso!')

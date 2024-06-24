@@ -22,7 +22,7 @@ class CustomUserView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except CustomUser.DoesNotExist:
                 return Response(
-                    {"message": "Usuário não encontrado", "success": False},
+                    {"message": "Usuário não encontrado.", "success": False},
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
@@ -35,20 +35,21 @@ class CustomUserView(APIView):
                 )
                 serializer.save()
                 return Response(
-                    {"message": "Usuário criado com sucesso", "success": True},
+                    {"message": "Usuário cadastrado com sucesso.", "success":
+                        True},
                     status=status.HTTP_201_CREATED,
                 )
             except Exception as e:
                 return Response(
                     {
-                        "message": f"Erro ao criar o usuário: {str(e)}",
+                        "message": f"Erro ao criar o usuário: {str(e)}.",
                         "success": False,
                     },
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
         return Response(
             {
-                "message": "Dados inválidos",
+                "message": "Dados inválidos.",
                 "errors": serializer.errors,
                 "success": False,
             },
@@ -67,7 +68,7 @@ class CustomUserView(APIView):
             )
         except CustomUser.DoesNotExist:
             return Response(
-                {"message": "Usuário não encontrado", "success": False},
+                {"message": "Usuário não encontrado.", "success": False},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -76,18 +77,17 @@ class CustomUserView(APIView):
             user = CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
             return Response(
-                {"message": "Usuário não encontrado", "success": False},
+                {"message": "Usuário não encontrado.", "success": False},
                 status=status.HTTP_404_NOT_FOUND,
             )
         user.delete()
         return Response(
             {
-                "message": f'Usuário #{pk} deletado com sucesso',
+                "message": f'Usuário #{pk} deletado com sucesso.',
                 "success": True,
             },
             status=status.HTTP_204_NO_CONTENT,
         )
-
 
 
 class PasswordResetView(generics.GenericAPIView):
