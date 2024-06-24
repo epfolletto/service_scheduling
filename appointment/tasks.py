@@ -18,6 +18,7 @@ app = Celery(
 )
 
 
+# task assincrona criação da tarega
 @app.task()
 def create_appointment_task(data, body_user_id):
     if not data.get('user'):
@@ -30,6 +31,7 @@ def create_appointment_task(data, body_user_id):
     return None
 
 
+# task assincrona envio confirmacao em-ail
 @app.task()
 def send_confirmation_email_task(data):
     user = CustomUser.objects.get(id=data['user_id'])

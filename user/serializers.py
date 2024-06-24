@@ -20,10 +20,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
 
 
-class ResetPasswordRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-
-
+# classe resetar senha
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
@@ -50,6 +47,7 @@ class PasswordResetSerializer(serializers.Serializer):
         )
 
 
+# classe setar novo password
 class SetNewPasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True)
 

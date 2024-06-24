@@ -33,6 +33,7 @@ class UsuarioManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
+# Criar usuario customizado
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField('E-mail', unique=True)

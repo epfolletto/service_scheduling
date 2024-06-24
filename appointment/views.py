@@ -11,10 +11,10 @@ from rest_framework.permissions import IsAuthenticated
 class AppointmentAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def is_superuser(self, request, type):
+    def is_superuser(self, request, type, pk=None):
         is_superuser = request.user.is_superuser
         logged_user_id = request.user.id
-        if type == "post" or type == "delete":
+        if type == "post":
             body_user_id = (
                 request.data.get("user")
                 if request.data.get("user")
@@ -25,7 +25,12 @@ class AppointmentAPIView(APIView):
                 "body_user_id": body_user_id,
                 "logged_user_id": logged_user_id,
             }
-
+        if type == 'delete':
+            return {
+                "body_user_id": Appointment.objects.get(pk=pk).user.id,
+                "is_superuser": is_superuser,
+                "logged_user_id": logged_user_id,
+            }
         return {
             "is_superuser": is_superuser,
             "logged_user_id": logged_user_id,
@@ -142,7 +147,7 @@ class AppointmentAPIView(APIView):
             )
 
     def delete(self, request, pk=None):
-        data_req = self.is_superuser(request, "delete")
+        data_req = self.is_superuser(request, "delete", pk)
         if not pk:
             return Response(
                 {
@@ -152,8 +157,7 @@ class AppointmentAPIView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if (not data_req["is_superuser"] and data_req["logged_user_id"] !=
-                data_req["body_user_id"]):
+        if not data_req["is_superuser"] and data_req["logged_user_id"] != data_req["body_user_id"]:
             return Response(
                 {
                     "message": "Você não possui permissão para alterar "
@@ -162,18 +166,18 @@ class AppointmentAPIView(APIView):
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
-        try:
-            appointment = Appointment.objects.get(pk=pk)
-        except Appointment.DoesNotExist:
-            return Response(
-                {"message": "Agendamento não encontrado", "success": False},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        appointment.delete()
-        return Response(
-            {
-                "message": f"Agendamento #{pk} deletado com sucesso",
-                "success": True,
-            },
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        # try:
+        #     appointment = Appointment.objects.get(pk=pk)
+        # except Appointment.DoesNotExist:
+        #     return Response(
+        #         {"message": "Agendamento não encontrado", "success": False},
+        #         status=status.HTTP_404_NOT_FOUND,
+        #     )
+        # appointment.delete()
+        # return Response(
+        #     {
+        #         "message": f"Agendamento #{pk} deletado com sucesso",
+        #         "success": True,
+        #     },
+        #     status=status.HTTP_204_NO_CONTENT,
+        # )
