@@ -1,4 +1,5 @@
 # Agendamento de serviços
+Descrição de um serviço que tem por objetivo cadatrar usuários e agendar serviços.
 
 ## Início
 - Clonar o repositório:
