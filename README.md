@@ -29,12 +29,17 @@
 
 `(make cl) celery -A tasks worker -l info --pool=solo`
 
-- Para monitorar as tarefas de forma gráfica, pode-se utilizzar o [Flower](https://flower.readthedocs.io/en/latest/):
+- Para monitorar as tarefas de forma gráfica, pode-se utilizar o [Flower](https://flower.readthedocs.io/en/latest/):
 
 `(make fl) celery -A tasks flower --address=127.0.0.1 --port=5566`
 
-## [Celery](https://docs.celeryq.dev/en/stable/)
+## Rodar o projeto
 - Para iniciar o projeto:
   
 `make run (poetry run python3 manage.py runserver)`
+
+## Comando extra
+- Em determinado momento do desenvolvimento do projeto, foi necessário este comando:
+  
+`export DJANGO_SETTINGS_MODULE=nome_do_seu_projeto.settings`
  
