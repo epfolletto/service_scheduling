@@ -25,16 +25,17 @@ class AppointmentAPIView(APIView):
                 "body_user_id": body_user_id,
                 "logged_user_id": logged_user_id,
             }
-        if type == 'delete':
+        if type == 'delete' or type == 'put':
             return {
                 "body_user_id": Appointment.objects.get(pk=pk).user.id,
                 "is_superuser": is_superuser,
                 "logged_user_id": logged_user_id,
             }
-        return {
-            "is_superuser": is_superuser,
-            "logged_user_id": logged_user_id,
-        }
+        if type == 'get':
+            return {
+                "is_superuser": is_superuser,
+                "logged_user_id": logged_user_id,
+            }
 
     def get(self, request):
         data_req = self.is_superuser(request, "get")
@@ -116,10 +117,16 @@ class AppointmentAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        data_req = self.is_superuser(request, "put")
+        if not Appointment.objects.filter(pk=pk).exists():
+            return Response(
+                {
+                    "message": "Não foi encontrada nenhuma tarefa com este ID",
+                    "success": False,
+                }, status=status.HTTP_404_NOT_FOUND)
+
+        data_req = self.is_superuser(request, "put", pk)
         data = request.data
-        data["user"] = pk
-        if not data_req["is_superuser"] and data_req["logged_user_id"] != pk:
+        if not data_req["is_superuser"] and data_req["logged_user_id"] != data_req["body_user_id"]:
             return Response(
                 {
                     "message": "Você não possui permissão para alterar "
@@ -129,6 +136,7 @@ class AppointmentAPIView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         try:
+            data["user"] = data_req["logged_user_id"]
             appointment = Appointment.objects.get(pk=pk)
             serializer = AppointmentSerializer(appointment, data=data)
             if serializer.is_valid():
@@ -166,18 +174,18 @@ class AppointmentAPIView(APIView):
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
-        # try:
-        #     appointment = Appointment.objects.get(pk=pk)
-        # except Appointment.DoesNotExist:
-        #     return Response(
-        #         {"message": "Agendamento não encontrado", "success": False},
-        #         status=status.HTTP_404_NOT_FOUND,
-        #     )
-        # appointment.delete()
-        # return Response(
-        #     {
-        #         "message": f"Agendamento #{pk} deletado com sucesso",
-        #         "success": True,
-        #     },
-        #     status=status.HTTP_204_NO_CONTENT,
-        # )
+        try:
+            appointment = Appointment.objects.get(pk=pk)
+        except Appointment.DoesNotExist:
+            return Response(
+                {"message": "Agendamento não encontrado", "success": False},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        appointment.delete()
+        return Response(
+            {
+                "message": f"Agendamento #{pk} deletado com sucesso",
+                "success": True,
+            },
+            status=status.HTTP_204_NO_CONTENT,
+        )
