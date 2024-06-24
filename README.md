@@ -20,7 +20,7 @@ Descrição de um serviço que tem por objetivo cadatrar usuários e agendar ser
   
 `make migrate (poetry run python3 manage.py migrate)`
 
-## [Celery](https://docs.celeryq.dev/en/stable/)
+## Sistemas de filas com [Celery](https://docs.celeryq.dev/en/stable/)
 
 - O Celery precisa de um worker (RabbitMQ, Redis, Amazon SQS). Como recomendação, pode-se utilizar o [Redis](https://redis.io/) com docker:
 
