@@ -136,7 +136,7 @@ class AppointmentAPIView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         try:
-            data["user"] = data_req["logged_user_id"]
+            data["user"] = data_req["body_user_id"]
             appointment = Appointment.objects.get(pk=pk)
             serializer = AppointmentSerializer(appointment, data=data)
             if serializer.is_valid():

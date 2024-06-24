@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
-    <option name="sdkName" value="Python 3.10 (fusion-EuaN8X3C-py3.10)" />
+    <option name="cmdArguments" value="--line-length=79 --skip-string-normalization" />
+    <option name="pathToExecutable" value="$USER_HOME$/.local/bin/black" />
+    <option name="sdkName" value="Poetry (service_scheduling) (4)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (service_scheduling)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Poetry (service_scheduling) (4)" project-jdk-type="Python SDK" />
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />
   </component>
